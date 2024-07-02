@@ -1,0 +1,47 @@
+databaseChangeLog:
+  - logicalFilePath: db/changelog/db.changelog-lesson1.yaml
+  - changeSet:
+      id: 1
+      author: admin
+      changes:
+        - createTable:
+            tableName: wallets
+            columns:
+              - column:
+                  name: wallet_id
+                  type: UUID
+                  autoIncrement: false
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: amount
+                  type: BIGINT
+                  constraints:
+                    nullable: false
+  - changeSet:
+      id: 2
+      author: admin
+      changes:
+        - insert:
+            tableName: wallets
+            columns:
+              - column:
+                  name: wallet_id
+                  value: "81f44b16-7d06-4e10-a02c-2b2e54e84091"
+              - column:
+                  name: amount
+                  value: "2000"
+        - insert:
+            tableName: wallets
+            columns:
+              - column:
+                  name: wallet_id
+                  value: "92d5d2f5-c69b-458b-8ed2-d291ef3f3093"
+              - column:
+                  name: amount
+                  value: "3000"
+      rollback:
+        - delete:
+            tableName: wallets
+            where: wallet_id in ('81f44b16-7d06-4e10-a02c-2b2e54e84091', '92d5d2f5-c69b-458b-8ed2-d291ef3f3093')

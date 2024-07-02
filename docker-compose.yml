@@ -1,0 +1,51 @@
+services:
+  test-task:
+    image: client:0.0.1
+    env_file: .env
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - $SPRING_LOCAL_PORT:$SPRING_DOCKER_PORT
+    depends_on:
+      service-db:
+        condition: service_healthy
+    environment:
+      SPRING_APPLICATION_JSON: '{
+        "spring.datasource.url"  : "jdbc:postgresql://service-db:$POSTGRESDB_DOCKER_PORT/$POSTGRESDB_DATABASE",
+        "spring.datasource.username" : "$POSTGRESDB_USER",
+        "spring.datasource.password" : "$POSTGRESDB_ROOT_PASSWORD"
+      }'
+    networks:
+      db-net:
+
+  service-db:
+    image: postgres:16.2-alpine3.19
+    env_file: .env
+    user: postgres
+    environment:
+      POSTGRES_PASSWORD: $POSTGRESDB_ROOT_PASSWORD
+      POSTGRES_DB: $POSTGRESDB_DATABASE
+      POSTGRES_USER: $POSTGRESDB_USER
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready" ]
+      interval: 30s
+      timeout: 60s
+      retries: 5
+      start_period: 80s
+    expose:
+      - 5432
+    ports:
+      - $POSTGRESDB_LOCAL_PORT:$POSTGRESDB_DOCKER_PORT
+    restart: unless-stopped
+    networks:
+      db-net:
+
+volumes:
+  db-data-volume:
+    name: db-data-volume
+  pgadmin-data:
+
+networks:
+  db-net:
+    driver: bridge
