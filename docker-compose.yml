@@ -41,11 +41,6 @@ services:
     networks:
       db-net:
 
-volumes:
-  db-data-volume:
-    name: db-data-volume
-  pgadmin-data:
-
 networks:
   db-net:
     driver: bridge
