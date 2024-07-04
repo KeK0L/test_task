@@ -23,7 +23,7 @@ public class WalletController {
         if (bindingResult.hasErrors()) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new ErrorResponse(403, "Invalid JSON"));
         }
-        return service.editWallet(data);
+        return service.editWallet2(data);
     }
 
     @GetMapping("/wallets/{walletId}")

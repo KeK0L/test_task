@@ -10,4 +10,5 @@ import java.util.UUID;
 public interface WalletService {
     ResponseEntity<?> editWallet(WalletRequest data);
     ResponseEntity<?> findByWalletId(UUID walletId);
+    ResponseEntity<?> editWallet2(WalletRequest data);
 }
